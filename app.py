@@ -2,21 +2,15 @@
 
 from flask import Flask, render_template, json, request
 from flask_mysqldb import MySQL
-
+from flask_restplus import fields, Api, Resource
 # from werkzeug import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+api = Api(app)
 
-app.config['MYSQL_HOST'] = '206.189.71.70'
-app.config['MYSQL_USER'] = 'bhabani'
-app.config['MYSQL_PASSWORD'] = 'wisdom'
-app.config['MYSQL_DB'] = 'haricut'
-# app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-# app.secret_key = 'UPDATETHISPART'
+app.config.from_object('config')
 mysql = MySQL(app)
-
-
 
 
 @app.route("/")
@@ -26,10 +20,13 @@ def default():
 
 @app.route("/main")
 def mainPage():
-	return render_template('home.html')
+    """ 
+        router for the main method
+    """
+    return render_template('home.html')
 
 
-@app.route('/signUpPage')
+@app.route('/register')
 def showSignUp():
     return render_template('signup.html')
 
@@ -56,5 +53,6 @@ def signUp():
         return json.dumps({'html': '<span>All fields good !!</span>'})
     else:
         return json.dumps({'html': '<span>Enter the required fields</span>'})
+
 if __name__ == "__main__":
     app.run(debug=True)
