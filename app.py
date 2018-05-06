@@ -1,13 +1,12 @@
-
-
+"""This app module which starts the haircut application"""
 from flask import Flask, render_template, json, request
 from flask_mysqldb import MySQL
-from flask_restplus import fields, Api, Resource
+from apis import api
 # from werkzeug import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-api = Api(app)
+api.init_app(app)
 
 app.config.from_object('config')
 mysql = MySQL(app)
