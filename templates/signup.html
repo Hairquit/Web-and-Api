@@ -14,7 +14,7 @@
       $('#btnSignUp').click(function () {
 
         $.ajax({
-          url: '/signUp',
+          url: '/api/consumers/signUp',
           data: $('form').serialize(),
           type: 'POST',
           success: function (response) {
