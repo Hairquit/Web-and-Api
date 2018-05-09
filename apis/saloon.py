@@ -1,17 +1,23 @@
 from flask_restplus import Namespace, Resource, fields
+from database import mysql , alchemydb ,Saloon
+from flask import json, request
 
 api = Namespace('saloons', description='Saloons related operations')
 
-saloon = api.model('Saloon', {
-    'id': fields.String(required=True, description='The saloon identifier'),
-    'name': fields.String(required=True, description='The saloon name'),
+saloon = api.model('saloon', {
+    'saloonName' : fields.String(required=True, description='The saloon name'),
+    'saloonAddress' : fields.String(required=True, description='The saloon address'),
+    'capacity' : fields.String(required=False, description='The saloon capacity'),
+    'customerCnt' : fields.String(required=False, description='The saloon customer count at this time '),
+    'waitTime' : fields.String(required=False, description='The saloon expected wait time')
 })
 
 SALOONS = [
-    {'id': 'felix', 'name': 'Felix'},
-    {'id': 'saloonista', 'name': 'saloonista'},
+    {'saloonName': 'felix', 'saloonAddress': 'Felix'},
+    {'saloonName': 'saloonista', 'saloonAddress': 'saloonista'},
     
 ]
+       
 
 @api.route('/')
 class SaloonList(Resource):
@@ -21,10 +27,20 @@ class SaloonList(Resource):
         '''List all saloons'''
         return SALOONS
 
+    @api.doc('create_saloon')
+    @api.expect(saloon)
+    def post(self):
+        print(" request input is " +  str(request.get_json()))
+        # saloon1 = Saloon( saloonName='hairisrocacy', saloonAddress='1 hair saloon way ')
+        # alchemydb.session.add()
+        # alchemydb.session.commit()
+        return "hellow world" ,200
+
+
 @api.route('/<id>')
 @api.param('id', 'The saloon identifier')
 @api.response(404, 'Saloon not found')
-class Saloon(Resource):
+class SaloonUnit(Resource):
     @api.doc('get_saloon')
     @api.marshal_with(saloon)
     def get(self, id):
