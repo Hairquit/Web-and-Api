@@ -12,12 +12,6 @@ saloon = api.model('saloon', {
     'waitTime' : fields.String(required=False, description='The saloon expected wait time')
 })
 
-SALOONS = [
-    {'saloonName': 'felix', 'saloonAddress': 'Felix'},
-    {'saloonName': 'saloonista', 'saloonAddress': 'saloonista'},
-    
-]
-       
 
 @api.route('/')
 class SaloonList(Resource):
@@ -25,27 +19,31 @@ class SaloonList(Resource):
     @api.marshal_list_with(saloon)
     def get(self):
         '''List all saloons'''
+        SALOONS = Saloon.query.all()
         return SALOONS
 
     @api.doc('create_saloon')
     @api.expect(saloon)
     def post(self):
-        print(" request input is " +  str(request.get_json()))
-        # saloon1 = Saloon( saloonName='hairisrocacy', saloonAddress='1 hair saloon way ')
-        # alchemydb.session.add()
-        # alchemydb.session.commit()
-        return "hellow world" ,200
+        print(" request input is " + str(request.get_json()))
+        try:
+            inputSaloon = Saloon();
+            inputSaloon.create(request.get_json())
+            alchemydb.session.add(inputSaloon)
+            alchemydb.session.commit()
+        except Exception as e:
+            print( "Exception throw {}" .format(e) );
+        return "Your information was saved successfully" ,200
 
 
-@api.route('/<id>')
-@api.param('id', 'The saloon identifier')
+@api.route('/<name>')
+@api.param('name', 'The saloon identifier')
 @api.response(404, 'Saloon not found')
 class SaloonUnit(Resource):
     @api.doc('get_saloon')
     @api.marshal_with(saloon)
-    def get(self, id):
+    def get(self, name):
         '''Fetch a saloon given its identifier'''
-        for saloon in SALOONS:
-            if saloon['id'] == id:
-                return saloon
+        saloon = Saloon.query.filter(Saloon.saloonName == name).one()
+        return saloon
         api.abort(404)

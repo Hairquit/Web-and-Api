@@ -15,3 +15,9 @@ class Saloon(alchemydb.Model):
     def __repr__(self):
         return '<saloon %r>' % self.saloonName
 
+    def create(self , data):
+        self.saloonName=data.get("saloonName")
+        self.saloonAddress=data.get("saloonAddress")
+
+        print( " saloon name is {} and saloon address is {} " .format(self.saloonName,self.saloonAddress))
+
