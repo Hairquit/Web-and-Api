@@ -48,9 +48,9 @@ def main():
 
     print(" test coming here ")
 
-    app.run(debug=True)
-
+    #app.run(debug=True)
+main()
 
 if __name__ == "__main__":
-    main()
-    # app.run(debug=True)
+    #main()
+    app.run(debug=True)
